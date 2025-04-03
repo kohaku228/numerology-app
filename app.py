@@ -1,7 +1,15 @@
 import streamlit as st
 import datetime
+import locale
+
+# 日本語ロケールに設定（日本語の月・曜日表記用）
+try:
+    locale.setlocale(locale.LC_TIME, 'ja_JP.UTF-8')
+except:
+    pass
 
 # ピタゴラス数値変換表
+
 def char_to_num(c):
     mapping = {
         'A':1, 'J':1, 'S':1,
@@ -85,8 +93,7 @@ with basic_tab:
         "生年月日を選んでください",
         min_value=datetime.date(1925, 1, 1),
         max_value=datetime.date(2025, 12, 31),
-        value=datetime.date(1980, 1, 1),
-        format="YYYY-MM-DD"
+        value=datetime.date(1980, 1, 1)
     )
 
     if st.button("診断する"):
@@ -108,10 +115,20 @@ with compatibility_tab:
     col1, col2 = st.columns(2)
     with col1:
         your_name = st.text_input("あなたの名前（ローマ字）", key="your_name")
-        your_birthdate = st.date_input("あなたの生年月日", datetime.date(1980, 1, 1), key="your_birthdate")
+        your_birthdate = st.date_input(
+            "あなたの生年月日",
+            min_value=datetime.date(1925, 1, 1),
+            max_value=datetime.date(2025, 12, 31),
+            value=datetime.date(1980, 1, 1),
+            key="your_birthdate")
     with col2:
         partner_name = st.text_input("相手の名前（ローマ字）", key="partner_name")
-        partner_birthdate = st.date_input("相手の生年月日", datetime.date(1985, 1, 1), key="partner_birthdate")
+        partner_birthdate = st.date_input(
+            "相手の生年月日",
+            min_value=datetime.date(1925, 1, 1),
+            max_value=datetime.date(2025, 12, 31),
+            value=datetime.date(1985, 1, 1),
+            key="partner_birthdate")
 
     if st.button("相性を診断"):
         you = calculate_life_path_number(your_birthdate.strftime('%Y-%m-%d'))
@@ -125,4 +142,3 @@ with compatibility_tab:
         st.write(f"相手の運命数：{partner}")
         st.write(f"相性タイプ：{relation}")
         st.write(f"ふたりの関係性テーマ（合計数 {total}）：{theme}")
-
