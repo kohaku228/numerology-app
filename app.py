@@ -1,5 +1,5 @@
-
 import streamlit as st
+import datetime
 
 # ピタゴラス数値変換表
 def char_to_num(c):
@@ -48,7 +48,13 @@ st.title("🔢 数秘術診断アプリ")
 st.markdown("あなたの生年月日と名前から、4つの基本的な数秘術の数を導き出します。")
 
 name = st.text_input("名前（ローマ字で入力してください 例：TARO YAMADA）")
-birthdate = st.date_input("生年月日を選んでください")
+birthdate = st.date_input(
+    "生年月日を選んでください",
+    min_value=datetime.date(1925, 1, 1),
+    max_value=datetime.date(2025, 12, 31),
+    value=datetime.date(1980, 1, 1),
+    format="YYYY-MM-DD"
+)
 
 if st.button("診断する"):
     if name:
